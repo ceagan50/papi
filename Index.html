@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Gift for Papi Mia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #e84393;
+            margin-bottom: 10px;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: #fd79a8;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+
+        .gift-box {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 40px;
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
+
+        .gift-box:hover {
+            transform: scale(1.05);
+        }
+
+        .box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #e84393, #fd79a8);
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: transform 0.5s;
+            z-index: 2;
+        }
+
+        .lid {
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(45deg, #e84393, #fd79a8);
+            border-radius: 10px 10px 0 0;
+            top: -40px;
+            left: 0;
+            transition: transform 0.5s;
+            z-index: 3;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+
+        .ribbon {
+            position: absolute;
+            width: 40px;
+            height: 100%;
+            background: #fff;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        .ribbon::before {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 50%;
+            top: -30px;
+            left: -10px;
+        }
+
+        .gift-box:hover .box {
+            transform: translateY(10px);
+        }
+
+        .gift-box:hover .lid {
+            transform: translateY(-10px) rotate(10deg);
+        }
+
+        .message {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 1s ease;
+            border: 2px solid #ffafbd;
+        }
+
+        .message.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        h2 {
+            color: #fd79a8;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .heart {
+            color: #e84393;
+            font-size: 2rem;
+            margin: 0 5px;
+            animation: heartbeat 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .flowers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .flower {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.7;
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        .open-btn {
+            background: #e84393;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .open-btn:hover {
+            background: #fd79a8;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .music-note {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: music 3s infinite linear;
+        }
+
+        @keyframes music {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .music-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .music-btn {
+            background: transparent;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .volume-slider {
+            display: none;
+            margin-top: 10px;
+            width: 100px;
+        }
+
+        .music-controls:hover .volume-slider {
+            display: block;
+        }
+
+        .hearts-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: float-heart 8s infinite linear;
+        }
+
+        @keyframes float-heart {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.7; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .signature {
+            margin-top: 20px;
+            font-style: italic;
+            color: #e84393;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Audio element for background music - REPLACE THE SRC WITH YOUR SONG FILE -->
+    <audio id="backgroundMusic" loop>
+        <source src="Alphaville - Forever Young ( Video Lyrics ) [_jEP347F6_g].mp3" type="audio/mp3">
+        <source src="Alphaville - Forever Young ( Video Lyrics ) [_jEP347F6_g].mp3" type="audio/ogg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <div class="music-controls">
+        <button class="music-btn" id="musicToggle">🔊</button>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.1" value="0.5">
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>For My Beautiful Papi Mia <span class="heart">♥</span></h1>
+            <div class="subtitle">A special gift to help you relax</div>
+        </div>
+        
+        <div class="gift-box" id="giftBox">
+            <div class="lid"></div>
+            <div class="box"></div>
+            <div class="ribbon"></div>
+        </div>
+        
+        <button class="open-btn" id="openBtn">Open Your Gift</button>
+        
+        <div class="message" id="message">
+            <h2>Relief From Your Hard Day</h2>
+            <p>My dearest Papi Mia, Sweet BOOOOOO....💖','🥰</p>
+            <p>I know you've had a long and challenging day, and I wanted to create something special to help you relax and unwind.</p>
+            <p>You work so hard and handle everything with such grace and strength. I'm constantly in awe of you.</p>
+            <p>Remember that no matter how tough things get, I'm always here for you. You can lean on me, share your burdens, and I'll help carry them with you.</p>
+            <p>Take a deep breath, close your eyes for a moment, and imagine all the stress melting away.</p>
+            <p>You are loved, you are appreciated, and you are amazing.</p>
+            <p class="signature">Always yours, with all my love"Charles.." <span class="heart">♥</span></p>
+        </div>
+        
+        <div class="flowers" id="flowers"></div>
+        <div class="hearts-container" id="heartsContainer"></div>
+    </div>
+
+    <script>
+        // Music functionality
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        // Auto-play music when page loads
+        window.addEventListener('load', function() {
+            // Try to play music automatically
+            backgroundMusic.volume = 0.5;
+            const playPromise = backgroundMusic.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    // Auto-play was prevented, show instruction
+                    console.log('Auto-play prevented. User interaction required.');
+                    document.getElementById('openBtn').textContent = "Click to Open & Play Music";
+                });
+            }
+        });
+
+        // Music toggle button
+        musicToggle.addEventListener('click', function() {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play();
+                musicToggle.textContent = '🔊';
+            } else {
+                backgroundMusic.pause();
+                musicToggle.textContent = '🔇';
+            }
+        });
+
+        // Volume control
+        volumeSlider.addEventListener('input', function() {
+            backgroundMusic.volume = this.value;
+        });
+
+        // Create floating hearts on load
+        function createHearts() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = '♥';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDelay = Math.random() * 8 + 's';
+                heart.style.color = i % 2 === 0 ? '#e84393' : '#fd79a8';
+                heart.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        // Gift opening functionality
+        document.getElementById('openBtn').addEventListener('click', function() {
+            const message = document.getElementById('message');
+            const giftBox = document.getElementById('giftBox');
+            
+            // Ensure music is playing when gift is opened
+            if (backgroundMusic.paused) {
+                backgroundMusic.play();
+                musicToggle.textContent = '🔊';
+            }
+            
+            // Animate gift opening
+            giftBox.style.transform = 'scale(1.2)';
+            giftBox.style.opacity = '0.5';
+            
+            // Show message
+            setTimeout(() => {
+                message.classList.add('show');
+                giftBox.style.display = 'none';
+                this.style.display = 'none';
+                
+                // Create floating flowers
+                createFlowers();
+                
+                // Create music notes
+                createMusicNotes();
+            }, 800);
+        });
+
+        function createFlowers() {
+            const flowersContainer = document.getElementById('flowers');
+            const flowerEmojis = ['🌸', '🌺', '🌷', '🌹', '💐', '🥀', '🌻', '🌼', '🤭','😛' ,'💖','🥰' ,'🥰','😘' ,'💞','💋'];
+            
+            for (let i = 0; i < 20; i++) {
+                const flower = document.createElement('div');
+                flower.className = 'flower';
+                flower.innerHTML = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+                flower.style.left = Math.random() * 100 + 'vw';
+                flower.style.animationDelay = Math.random() * 10 + 's';
+                flower.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+                flowersContainer.appendChild(flower);
+            }
+        }
+
+        function createMusicNotes() {
+            const container = document.querySelector('.container');
+            const notes = ['♪', '♫', '♩', '♬'];
+            
+            for (let i = 0; i < 15; i++) {
+                const note = document.createElement('div');
+                note.className = 'music-note';
+                note.innerHTML = notes[Math.floor(Math.random() * notes.length)];
+                note.style.left = Math.random() * 100 + 'vw';
+                note.style.animationDelay = Math.random() * 3 + 's';
+                note.style.color = i % 2 === 0 ? '#e84393' : '#fd79a8';
+                container.appendChild(note);
+            }
+        }
+
+        // Initialize the page
+        createHearts();
+    </script>
+</body>
+</html>
